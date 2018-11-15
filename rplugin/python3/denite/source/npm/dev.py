@@ -3,7 +3,6 @@ import os
 import platform
 from ..base import Base
 from operator import itemgetter
-from ...kind.npm import Kind
 
 isMac = platform.system() == 'Darwin'
 
@@ -13,7 +12,7 @@ class Source(Base):
         super().__init__(vim)
 
         self.name = 'npm/dev'
-        self.kind = Kind(vim)
+        self.kind = 'npm'
 
     def highlight(self):
         self.vim.command('highlight link deniteSource__NpmName Directory')

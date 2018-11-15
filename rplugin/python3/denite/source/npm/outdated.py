@@ -3,7 +3,6 @@ import os
 from os.path import expanduser
 import re
 from ..base import Base
-from ...kind.npm import Kind as BaseKind
 
 splitRe = re.compile(r"\s+")
 
@@ -21,7 +20,7 @@ class Source(Base):
     def __init__(self, vim):
         Base.__init__(self, vim)
         self.name = 'npm/outdated'
-        self.kind = Kind(vim)
+        self.kind = 'npm/outdated'
         self.sorters = []
 
     def on_init(self, context):
@@ -83,18 +82,3 @@ def _candidate(x, root):
         'source__name': x['name'],
         'action__path': os.path.join(root, 'node_modules', x['name']),
         }
-
-class Kind(BaseKind):
-    def __init__(self, vim):
-        super().__init__(vim)
-        self.name = 'npm/oudated'
-
-    def action_update(self, context):
-        args = ' '.join(map(lambda x: x['source__name'], context['targets']))
-        cmd = 'npm update %s' % args
-        self.vim.call('npm#run_command', cmd)
-
-    def action_upgrade(self, context):
-        args = ' '.join(map(lambda x: x['source__name'] + '@latest', context['targets']))
-        cmd = 'npm install %s' % args
-        self.vim.call('npm#run_command', cmd)
